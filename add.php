@@ -13,17 +13,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header("Location: add.php");
         return;
     }
-    $sql = "INSERT INTO Profile (user_id, first_name, last_name, email, headline, summary) 
-        VALUES (:uid, :fn, :ln, :em, :he, :su)";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([
-    ':uid' => $_SESSION['user_id'],  // ← thêm dòng này
-    ':fn' => $_POST['first_name'],
-    ':ln' => $_POST['last_name'],
-    ':em' => $_POST['email'],
-    ':he' => $_POST['headline'],
-    ':su' => $_POST['summary'],
-]);
+$query = $pdo->prepare("INSERT INTO Profile (user_id, first_name, last_name, email, headline, summary) VALUES (:user_id, :first_name, :last_name, :email, :headline, :summary)");
+	$query->execute(array(
+		':user_id' => $_SESSION['user_id'],
+		':first_name' => $_POST['first_name'],
+		':last_name' => $_POST['last_name'],
+		':email' => $_POST['email'],
+		':headline' => $_POST['headline'],
+		':summary' => $_POST['summary']
+	));
+
 
     $_SESSION['success'] = "Profile added";
     header("Location: index.php");

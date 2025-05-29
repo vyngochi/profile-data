@@ -3,12 +3,6 @@ session_start();
 require_once 'pdo.php';
 require_once 'util.php';
 
-if (!isset($_SESSION['user_id'])) {
-    $_SESSION['error'] = "Access denied. Please login first.";
-    header('Location: index.php');
-    return;
-}
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($_POST['first_name']) || empty($_POST['last_name']) || empty($_POST['email']) ||
         empty($_POST['headline']) || empty($_POST['summary'])) {
@@ -33,6 +27,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ':headline' => $_POST['headline'],
         ':summary' => $_POST['summary']
     ));
+    if (!isset($_SESSION['user_id'])) {
+    $_SESSION['error'] = "Access denied. Please login first.";
+    header('Location: index.php');
+    return;
+}
     $_SESSION['success'] = "Profile added successfully!";
     header('Location: index.php');
     return;

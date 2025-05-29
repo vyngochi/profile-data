@@ -1,15 +1,11 @@
 <?php
 session_start();
-if (isset($_POST['cancel'])) {
-    header("Location: index.php");
-    return;
-}
-
 $salt = 'XyZzy12*_';
-$stored_hash = hash('md5', $salt.'php123');
+$stored_hash = hash('md5', 'php123'.$salt); // pw: php123
 
 if (isset($_POST['email']) && isset($_POST['pass'])) {
-    if (hash('md5', $salt.$_POST['pass']) == $stored_hash) {
+    $check = hash('md5', $_POST['pass'].$salt);
+    if ($check === $stored_hash) {
         $_SESSION['name'] = $_POST['email'];
         header("Location: index.php");
         return;
@@ -20,17 +16,15 @@ if (isset($_POST['email']) && isset($_POST['pass'])) {
     }
 }
 ?>
-<html>
-<body>
-<h1>Please Log In</h1>
-<?php flashMessages(); ?>
+
+<!-- HTML Form -->
+<?php if (isset($_SESSION['error'])): ?>
+    <p style="color:red"><?= $_SESSION['error'] ?></p>
+    <?php unset($_SESSION['error']); ?>
+<?php endif; ?>
+
 <form method="post">
-    <label for="email">Email</label>
-    <input type="text" name="email"><br/>
-    <label for="pass">Password</label>
-    <input type="password" name="pass"><br/>
+    Email: <input type="text" name="email"><br/>
+    Password: <input type="password" name="pass"><br/>
     <input type="submit" value="Log In">
-    <input type="submit" name="cancel" value="Cancel">
 </form>
-</body>
-</html>

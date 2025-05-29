@@ -5,8 +5,15 @@ require_once "pdo.php";
 $stmt = $pdo->query("SELECT profile_id, first_name, last_name, headline FROM Profile");
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
-
-<h1>Resume Registry</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vy Ngo Chi - 161a79c2</title>
+</head>
+<body>
+    <h1>Resume Registry</h1>
 
 <?php
 if (isset($_SESSION['success'])) {
@@ -33,3 +40,6 @@ if (isset($_SESSION['success'])) {
 <?php else: ?>
     <a href="login.php">Please log in</a>
 <?php endif; ?>
+
+</body>
+</html>

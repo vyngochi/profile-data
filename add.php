@@ -1,7 +1,13 @@
 <?php
 session_start();
+
+
 require_once 'pdo.php';
 require_once 'util.php';
+
+if (!isset($_SESSION['user_id'])) {
+    die("ACCESS DENIED");
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($_POST['first_name']) || empty($_POST['last_name']) || empty($_POST['email']) ||

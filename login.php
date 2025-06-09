@@ -7,7 +7,7 @@ if (isset($_POST['email']) && isset($_POST['pass'])) {
     $check = hash('md5', $_POST['pass'].$salt);
     if ($check === $stored_hash) {
         $_SESSION['name'] = $_POST['email'];
-        $_SESSION['user_id'] = $_POST['user_id']; 
+        $_SESSION['user_id'] = 1;
         header("Location: index.php");
         return;
     } else {

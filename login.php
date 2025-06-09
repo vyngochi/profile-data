@@ -1,13 +1,21 @@
 <?php
 session_start();
+require_once "pdo.php"; // cần để kết nối tới CSDL
+
 $salt = 'XyZzy12*_';
 $stored_hash = hash('md5', 'php123'.$salt); // pw: php123
 
 if (isset($_POST['email']) && isset($_POST['pass'])) {
     $check = hash('md5', $_POST['pass'].$salt);
-    if ($check === $stored_hash) {
-        $_SESSION['name'] = $_POST['email'];
-        $_SESSION['user_id'] = 1;
+
+    // Lấy user dựa trên email
+    $stmt = $pdo->prepare("SELECT user_id, name FROM users WHERE email = :em");
+    $stmt->execute([':em' => $_POST['email']]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($row !== false && $check === $stored_hash) {
+        $_SESSION['name'] = $row['name'];
+        $_SESSION['user_id'] = $row['user_id']; // ✅ Lưu user_id
         header("Location: index.php");
         return;
     } else {
@@ -17,15 +25,3 @@ if (isset($_POST['email']) && isset($_POST['pass'])) {
     }
 }
 ?>
-
-<!-- HTML Form -->
-<?php if (isset($_SESSION['error'])): ?>
-    <p style="color:red"><?= $_SESSION['error'] ?></p>
-    <?php unset($_SESSION['error']); ?>
-<?php endif; ?>
-
-<form method="post">
-    Email: <input type="text" name="email"><br/>
-    Password: <input type="password" name="pass"><br/>
-    <input type="submit" value="Log In">
-</form>
